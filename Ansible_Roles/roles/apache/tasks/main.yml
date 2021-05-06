@@ -5,18 +5,18 @@
 
 - name: Replace httpd.conf config file
   template:
-    dest: httpd.conf
-    src: /etc/httpd/conf/httpd.conf
+    src: httpd.conf
+    dest: /etc/httpd/conf/httpd.conf
 
 - name: Copy {{ vhost }} configuration file
-  template:
-    dest: /etc/httpd/conf.d/"{{ vhost }}".conf
-    src:  "{{ vhost }}".conf
+  template: src={{ vhost }}.conf dest=/etc/httpd/conf.d/{{ vhost }}.conf
 
 - name: Sure apache starts at boot
   systemd:
     name: httpd
     enabled: yes
+  notify:
+    - Restart Apache
 
 - name: Start apache by systemd
   systemd:
@@ -36,3 +36,7 @@
       port: 80/tcp
       permanent: yes
       state: enabled
+  notify:
+    - Reload firewalld
+  
+

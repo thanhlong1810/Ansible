@@ -1,0 +1,6 @@
+- name: Install required packages
+  yum:
+    name:
+      - wget
+      
+    state: latest

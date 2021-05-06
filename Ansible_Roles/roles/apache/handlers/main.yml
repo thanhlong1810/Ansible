@@ -3,7 +3,6 @@
     name: httpd
     state: restarted
 
-
 - name: Reload firewalld
   systemd:
     state: reloaded

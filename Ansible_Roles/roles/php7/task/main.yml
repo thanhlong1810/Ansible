@@ -2,7 +2,7 @@
   yum:
     name: "{{ php7_repo }}"
     state: present
-- name:
+- name: Install php7 packages
   yum:
     name:
       - php71w
