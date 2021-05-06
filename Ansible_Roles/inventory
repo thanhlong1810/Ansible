@@ -1,0 +1,7 @@
+[client1]
+192.168.20.129
+
+[client1:vars]
+ansible_user=root
+ansible_ssh_pass=123456
+ansible_become_password=123456

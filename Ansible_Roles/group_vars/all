@@ -1,0 +1,5 @@
+#Virtual Host
+vhost: example.local
+
+#Document Root for all sites
+document_root: /var/www

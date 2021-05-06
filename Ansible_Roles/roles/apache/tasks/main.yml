@@ -1,0 +1,38 @@
+- name: Install Apache latest version
+  yum:
+    name: httpd
+    state: latest
+
+- name: Replace httpd.conf config file
+  template:
+    dest: httpd.conf
+    src: /etc/httpd/conf/httpd.conf
+
+- name: Copy {{ vhost }} configuration file
+  template:
+    dest: /etc/httpd/conf.d/"{{ vhost }}".conf
+    src:  "{{ vhost }}".conf
+
+- name: Sure apache starts at boot
+  systemd:
+    name: httpd
+    enabled: yes
+
+- name: Start apache by systemd
+  systemd:
+    name: httpd
+    state: started
+
+- name: Allow port 443 in firewalld
+  firewalld:
+    zone: public
+    port: 443/tcp
+    permanent: yes
+    state: enabled
+
+- name: Allow port 80 in firewalld
+  firewalld:
+      zone: public
+      port: 80/tcp
+      permanent: yes
+      state: enabled
