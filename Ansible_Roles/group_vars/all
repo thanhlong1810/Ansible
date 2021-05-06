@@ -1,6 +1,13 @@
+# Server IP Add
+server_web: 192.169.20.129
+
 #Virtual Host
 vhost: httpd.local
 
-
 #Document Root for all sites
 document_root: /var/www
+
+#Wordpress Database
+wp_db_user: wordpress
+wp_db_password: P@ssword
+wp_db_name: wordpress
