@@ -1,0 +1,19 @@
+- name: Clone code from Github
+  git:
+    repo: https://github.com/WordPress/WordPress.git
+    dest: /var/www/{{ vhost }}
+    clone: yes
+    update: yes
+
+- name: Change DocumentRoot Permission
+  file:
+    path: "{{ document_root }}/{{ vhost }}"
+    owner: apache
+    group: apache
+    mode: 0755
+    recurse: yes
+
+- name: Replace wordpress config file
+  template:
+    src: wp-config.php
+    dest: "{{ document_root }}/{{ vhost }}"
