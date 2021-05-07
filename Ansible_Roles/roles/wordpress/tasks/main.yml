@@ -1,9 +1,10 @@
-- name: Clone code from Github
+- name: Pull code from Github
   git:
     repo: https://github.com/WordPress/WordPress.git
     dest: /var/www/{{ vhost }}
     clone: yes
     update: yes
+    force: yes
 
 - name: Change DocumentRoot Permission
   file:

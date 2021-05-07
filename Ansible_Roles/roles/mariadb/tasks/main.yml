@@ -67,6 +67,7 @@
     - localhost
     - 127.0.0.1
     - "{{ server_web }}"
+    - "{{ server_db }}"
 
 - name: Disable SELinux
   shell: |

@@ -1,5 +1,6 @@
 # Server IP Add
-server_web: 192.169.20.129
+server_web: localhost
+server_db: localhost
 
 #Virtual Host
 vhost: httpd.local
