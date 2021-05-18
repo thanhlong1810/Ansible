@@ -5,6 +5,7 @@ server_db: localhost
 #Virtual Host
 vhost: httpd.local
 nginx: nginx.local
+osticket: osticket
 
 #Document Root for all sites
 document_root: /var/www

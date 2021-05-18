@@ -1,20 +1,35 @@
 - name: pull code from Github
   git:
     repo: https://github.com/osTicket/osTicket.git
-    dest: /var/www/osticket/{{ vhost }}
+    dest: /var/www/{{ osticket }}
     clone: yes
     update: yes
     force: yes
 
+
+- name: Replace ost config file
+  template:
+    src: ost-config.php
+    dest: "/var/www/{{ osticket }}/include/"
+
+
 - name: Change DocumentRoot Permission
   file:
-    path: "{{ document_root }}/osticket/{{ vhost }}"
+    path: "{{ document_root }}/{{ osticket }}"
     owner: apache
     group: apache
     mode: 0755
     recurse: yes
 
-- name: Replace wordpress config file
-  template:
-    src: wp-config.php
-    dest: "{{ document_root }}/osticket/{{ vhost }}"
+
+- name: Move file osticket to /var/www/html/
+  command: mv /var/www/osticket/ /var/www/html/
+
+
+- name: Change DocumentRoot Permission
+  file:
+    path: "{{ document_root }}/html"
+    owner: apache
+    group: apache
+    mode: 0755
+    recurse: yes
