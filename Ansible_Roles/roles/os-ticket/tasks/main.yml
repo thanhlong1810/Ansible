@@ -1,0 +1,20 @@
+- name: pull code from Github
+  git:
+    repo: https://github.com/osTicket/osTicket.git
+    dest: /var/www/osticket/{{ vhost }}
+    clone: yes
+    update: yes
+    force: yes
+
+- name: Change DocumentRoot Permission
+  file:
+    path: "{{ document_root }}/osticket/{{ vhost }}"
+    owner: apache
+    group: apache
+    mode: 0755
+    recurse: yes
+
+- name: Replace wordpress config file
+  template:
+    src: wp-config.php
+    dest: "{{ document_root }}/osticket/{{ vhost }}"

@@ -1,5 +1,5 @@
 [client1]
-192.168.20.129
+172.16.91.34
 
 [client1:vars]
 ansible_user=root

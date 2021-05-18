@@ -4,3 +4,5 @@
   roles:
     - php7
     - apache
+    - mariadb
+    - os-ticket
