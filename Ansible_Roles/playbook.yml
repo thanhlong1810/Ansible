@@ -2,7 +2,5 @@
 - hosts: client1
   become: yes
   roles:
-    - php7
-    - apache
-    - mariadb
-    - os-ticket
+    - common
+    - Fog
