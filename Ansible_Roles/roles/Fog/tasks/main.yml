@@ -26,9 +26,21 @@
     update: yes
     force: yes
 
-- name: Disabled Firewalld
+- name: Allow port 443 in firewalld
   firewalld:
-    state: disabled
+    zone: public
+    port: 443/tcp
+    permanent: yes
+    state: enabled
+
+- name: Allow port 80 in firewalld
+  firewalld:
+      zone: public
+      port: 80/tcp
+      permanent: yes
+      state: enabled
+  notify:
+    - Reload firewalld
 
 - name: Disable SELinux
   shell: |
@@ -39,4 +51,9 @@
   shell: |
     cd /root/fog/bin
     ./installfog.sh -Y -f /root/temp_settings
-    
+
+- name: send a message to chat in playbook
+  telegram:
+    token: '1792774787:AAEYZ5OocqsWHWuIBizx5RSxrVTdH8m089A'
+    chat_id: -547842145
+    msg: Ansible task finished
