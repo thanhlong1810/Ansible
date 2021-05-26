@@ -38,5 +38,5 @@
 - name: Install FOG
   shell: |
     cd /root/fog/bin
-    ./installfog.sh -Y -f /root/temp_settings"
-
+    ./installfog.sh -Y -f /root/temp_settings
+    
