@@ -5,16 +5,15 @@
 - name: pull code from Github
   git:
     repo: https://github.com/osTicket/osTicket.git
-    dest: /var/www/{{ osticket }}
+    dest: /var/www/
     clone: yes
     update: yes
     force: yes
 
-
-- name: Replace ost config file
-  template:
-    src: ost-config.php
-    dest: "/var/www/{{ osticket }}/include/"
+- name: Change name file ost-sampleconfig.php
+  shell: |
+    cd /var/www/osTicket/
+    cp include/ost-sampleconfig.php include/ost-config.php
 
 
 - name: Change DocumentRoot Permission
@@ -26,17 +25,10 @@
     recurse: yes
 
 
-- name: Move file osticket to /var/www/html/
+- name: Disable SELinux
   shell: |
-    mv /var/www/{{ osticket }} /var/www/html/
-
-- name: Change DocumentRoot Permission
-  file:
-    path: "{{ document_root }}/html"
-    owner: apache
-    group: apache
-    mode: 0755
-    recurse: yes
+    setenforce 0
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux
 
 
 - name: send a message to chat in playbook
