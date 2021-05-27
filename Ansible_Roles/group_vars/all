@@ -2,15 +2,23 @@
 server_web: localhost
 server_db: localhost
 
-#Virtual Host
+# Virtual Host
 vhost: httpd.local
 nginx: nginx.local
-osticket: osticket
+osticket: osticket.local
 
-#Document Root for all sites
+
+# Document Root for all sites
 document_root: /var/www
 
-#Wordpress Database
+
+# Wordpress Database
 wp_db_user: wordpress
 wp_db_password: P@ssword
 wp_db_name: wordpress
+
+
+# Osticket Database
+osticket_user: osticket
+osticket_password: P@ssword
+osticket_db: osticket

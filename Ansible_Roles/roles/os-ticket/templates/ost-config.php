@@ -36,9 +36,9 @@ define('ADMIN_EMAIL','%ADMIN-EMAIL');
 # Mysql Login info
 define('DBTYPE','mariadb');
 define('DBHOST','{{ server_db }}');
-define('DBNAME','{{ wp_db_name }}');
-define('DBUSER','{{ wp_db_user }}');
-define('DBPASS','{{ wp_db_password }}');
+define('DBNAME','{{ osticket_db }}');
+define('DBUSER','{{ osticket_user }}');
+define('DBPASS','{{ osticket_password }}');
 
 # Table prefix
 define('TABLE_PREFIX','%CONFIG-PREFIX');

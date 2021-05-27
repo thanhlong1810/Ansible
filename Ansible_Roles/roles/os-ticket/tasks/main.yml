@@ -28,7 +28,7 @@
 
 - name: Move file osticket to /var/www/html/
   shell: |
-    mv /var/www/osticket/ /var/www/html/
+    mv /var/www/{{ osticket }} /var/www/html/
 
 - name: Change DocumentRoot Permission
   file:

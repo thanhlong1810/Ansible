@@ -8,8 +8,8 @@
     src: httpd.conf
     dest: /etc/httpd/conf/httpd.conf
 
-- name: Copy {{ vhost }} configuration file
-  template: src={{ vhost }}.conf dest=/etc/httpd/conf.d/{{ vhost }}.conf
+- name: Copy {{ osticket }} configuration file
+  template: src={{ osticket }}.conf dest=/etc/httpd/conf.d/{{ osticket }}.conf
 
 - name: Sure apache starts at boot
   systemd:

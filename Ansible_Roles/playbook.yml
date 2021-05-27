@@ -4,3 +4,6 @@
   roles:
     - common
     - apache
+    - php7
+    - mariadb
+    - os-ticket
