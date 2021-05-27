@@ -1,3 +1,7 @@
+- name: Change hostname Osticket
+  shell: |
+    hostnamectl set-hostname {{hostname}}
+
 - name: pull code from Github
   git:
     repo: https://github.com/osTicket/osTicket.git
@@ -23,8 +27,8 @@
 
 
 - name: Move file osticket to /var/www/html/
-  command: mv /var/www/osticket/ /var/www/html/
-
+  shell: |
+    mv /var/www/osticket/ /var/www/html/
 
 - name: Change DocumentRoot Permission
   file:
@@ -33,3 +37,10 @@
     group: apache
     mode: 0755
     recurse: yes
+
+
+- name: send a message to chat in playbook
+  telegram:
+    token: '1792774787:AAEYZ5OocqsWHWuIBizx5RSxrVTdH8m089A'
+    chat_id: -547842145
+    msg: Ansible task (Osticket) finished

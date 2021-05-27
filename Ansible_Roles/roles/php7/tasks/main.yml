@@ -18,3 +18,9 @@
       - php71w-devel
       - php71w-mysql
     state: latest
+
+- name: send a message to chat in playbook
+  telegram:
+    token: '1792774787:AAEYZ5OocqsWHWuIBizx5RSxrVTdH8m089A'
+    chat_id: -547842145
+    msg: Ansible task (PHP) finished
