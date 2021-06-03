@@ -2,17 +2,18 @@
   shell: |
     hostnamectl set-hostname {{hostname}}
 
-- name: pull code from Github
+
+- name: Pull code from Github
   git:
     repo: https://github.com/osTicket/osTicket.git
-    dest: /var/www/
+    dest: /var/www/{{ osticket }}
     clone: yes
     update: yes
     force: yes
 
 - name: Change name file ost-sampleconfig.php
   shell: |
-    cd /var/www/osTicket/
+    cd /var/www/{{ osticket }}
     cp include/ost-sampleconfig.php include/ost-config.php
 
 

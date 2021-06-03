@@ -1,2 +1,2 @@
 fog_dhcp_server: false
-hostname: fog.abc.com
+hostname: fog.ironbee.local
