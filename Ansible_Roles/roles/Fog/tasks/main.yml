@@ -26,21 +26,12 @@
     update: yes
     force: yes
 
-- name: Allow port 443 in firewalld
-  firewalld:
-    zone: public
-    port: 443/tcp
-    permanent: yes
-    state: enabled
 
-- name: Allow port 80 in firewalld
-  firewalld:
-      zone: public
-      port: 80/tcp
-      permanent: yes
-      state: enabled
-  notify:
-    - Reload firewalld
+- name: Disable Firewalld
+  shell: |
+    systemctl stop firewalld
+    systemctl disable firewalld
+    
 
 - name: Disable SELinux
   shell: |
