@@ -46,8 +46,8 @@
 
 - name: Copy images in DGP to CTO HPO
   shell: |
-    scp -r -P 2211 root@ip27.digitel.vn:/images/CTO-HPO-Win10-Teamleader /images 
-    scp -r -P 2211 root@ip27.digitel.vn:/images/CTO-HPO-Win10-Telesale /images
+    scp -r -P 2211 root@ip27.digitel.vn:/images/CTO-HPO-Win10-Teamleader-Update /images 
+    scp -r -P 2211 root@ip27.digitel.vn:/images/CTO-HPO-Win10-Telesale-Update /images
 
 - name: send a message to chat in playbook
   telegram:
