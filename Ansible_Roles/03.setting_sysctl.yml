@@ -1,0 +1,82 @@
+---
+- name: setting config sysctl
+  hosts: all
+  become: yes
+  become_user: root
+
+  vars:
+    - hostname: centos7
+
+
+  tasks:
+    - name: Stop firewalld
+      service:
+        name: firewalld
+        state: stopped
+        enabled: False
+  
+
+    - name: update hostnames
+      hostname:
+        name: "{{ hostname }}"
+
+
+    # Sysctl Setting
+    - name: Disable the TCP timestamps option for better CPU utilization, ipv4.ip_forward
+      sysctl:
+        name: "{{ item }}"
+        value: '0'
+        state: present
+        sysctl_set: yes
+      with_items:
+        - net.ipv4.tcp_timestamps
+        - net.ipv4.ip_forward
+
+
+    - name: Enable the TCP selective acks option for better throughput and  low latency mode for TCP
+      sysctl:
+        name: "{{ item }}"
+        value: '1'
+        state: present
+        sysctl_set: yes
+      with_items:
+        - net.ipv4.tcp_sack
+        - net.ipv4.tcp_low_latency
+        - net.ipv4.tcp_adv_win_scale
+
+
+    - name: Increase the maximum length of processor input queues
+      sysctl:
+        name: "{{ item }}"
+        value: '250000'
+        state: present
+        sysctl_set: yes
+      with_items:
+        - net.core.netdev_max_backlog
+
+
+    - name: Increase the TCP maximum and default buffer sizes using setsockopt
+      sysctl:
+        name: "{{ item }}"
+        value: '4194304'
+        state: present
+        sysctl_set: yes
+      with_items:
+        - net.core.rmem_max
+        - net.core.wmem_max
+        - net.core.rmem_default
+        - net.core.wmem_default
+        - net.core.optmem_max        
+
+
+    - name: Increase memory thresholds to prevent packet dropping
+      sysctl:
+        name: '{{ item.name }}'
+        value: '{{ item.value }}'
+        state: present
+        sysctl_set: yes
+      with_items:
+        - { name: net.ipv4.tcp_rmem, value: "4096 87380 4194304" }
+        - { name: net.ipv4.tcp_wmem, value: "4096 65536 4194304" }
+
+

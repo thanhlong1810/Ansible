@@ -1,0 +1,2 @@
+fog_dhcp_server: false
+hostname: fog.digitel.local

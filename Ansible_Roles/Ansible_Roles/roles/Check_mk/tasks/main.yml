@@ -1,0 +1,49 @@
+- name: Change hostname
+  shell: |
+    hostnamectl set-hostname {{hostname}}
+
+
+- name: Update all package
+  shell: |
+    yum groupinstall base -y
+    yum groupinstall core -y
+    yum install -y epel-release
+    yum -y update
+
+- name: Upgrade all package
+  yum: name=* state=latest
+
+
+- name: Disable SELinux
+  shell: |
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux
+    setenforce 0
+
+
+- name: Install Chek_mk Centos7
+  get_url:
+    url: https://download.checkmk.com/checkmk/2.0.0p17/{{ check_mk_version }}.x86_64.rpm
+    dest: /root/{{ check_mk_version }}x86_64.rpm
+
+- name: Install Check_mk
+  shell: |
+    cd /root
+    yum -y install {{ check_mk_version }}x86_64.rpm
+
+
+- name: Allow Firewalld
+  shell: |
+    firewall-cmd --add-service=http --zone=public --permanent
+    firewall-cmd --reload
+
+- name: Check OMD version & Create Check_mk Server
+  shell: |
+    omd create {{hostname}}
+    omd start {{hostname}}
+
+
+- name: send a message to chat in playbook
+  telegram:
+    token: '1792774787:AAEYZ5OocqsWHWuIBizx5RSxrVTdH8m089A'
+    chat_id: -547842145
+    msg: Ansible task (Check_mk) finished

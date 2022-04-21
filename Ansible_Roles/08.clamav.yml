@@ -1,0 +1,85 @@
+---
+- name: Install ClamAV on Centos7
+  hosts: all
+  become: yes
+  become_user: root
+
+  vars:
+    - source_file: /Users/longtran/Desktop/Anisible/Ansible/clamAV_config/
+    - dest_file: /root
+    - dest_scan_conf: /etc/clamd.d
+    - dest_freshclam_conf: /etc
+
+  tasks:
+    - name: Install epel
+      yum:
+        name:
+          - epel-release
+        state: latest
+
+    - name: Install ClamAV
+      yum:
+        name:
+          - clamav-server
+          - clamav-data 
+          - clamav-update
+          - clamav-filesystem 
+          - clamav 
+          - clamav-scanner-systemd 
+          - clamav-devel 
+          - clamav-lib 
+          - clamav-server-systemd
+        state: latest
+
+
+    - name: Move files scan.conf to scan.conf.default
+      copy:
+        remote_src: yes
+        src: /etc/clamd.d/scan.conf
+        dest: /etc/clamd.d/scan.conf.default
+
+    - name: Move files freshclam.conf to freshclam.conf.default
+      copy:
+        remote_src: yes
+        src: /etc/freshclam.conf
+        dest: /etc/freshclam.conf.default
+
+
+    - name : copy file bash to /root and edit permissions
+      copy:
+        src: "{{ source_file }}scan_virus.sh"
+        dest: "{{ dest_file }}"
+        mode : 0755
+
+    - name : copy file scan.conf to etc/clamd.d
+      copy:
+        src: "{{ source_file }}scan.conf"
+        dest: "{{ dest_scan_conf }}"
+
+    - name : copy file freshclam.conf to /etc
+      copy:
+        src: "{{ source_file }}freshclam.conf"
+        dest: "{{ dest_freshclam_conf }}"
+
+
+    - name: Create target directory
+      file: 
+        path: /var/log/clamav
+        state: directory
+        mode: 0755
+
+
+    - name: Cron freshclam at 00 and 12
+      cron:
+        name: "fresh clam"
+        minute: "0"
+        hour: "0,12"
+        job: "/usr/bin/freshclam"
+
+
+    - name: daily scan
+      cron:
+        name: "daily scan"
+        minute: "1"
+        hour: "1"
+        job: "/root/scan_virus.sh"

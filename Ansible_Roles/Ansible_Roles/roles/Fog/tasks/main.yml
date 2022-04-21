@@ -1,0 +1,57 @@
+- name: Change hostname
+  shell: |
+    hostnamectl set-hostname {{hostname}}
+
+- name: Write temp settings/answer file for FOG
+  template:
+    src: temp_settings.j2
+    dest: "/root/temp_settings"
+
+
+- name: Make sure unattended-upgrades is not installed
+  yum:
+    name: unattended-upgrades
+    state: absent
+  when: ansible_os_family == "RedHat"
+
+- name: Check if FOG is already installed
+  stat:
+    path: /opt/fog
+  register: fog_path_found
+
+- name: Pull code from Github
+  git:
+    repo: https://github.com/FOGProject/fogproject.git
+    dest: /root/fog
+    clone: yes
+    update: yes
+    force: yes
+
+
+- name: Disable Firewalld
+  shell: |
+    systemctl stop firewalld
+    systemctl disable firewalld
+    
+
+- name: Disable SELinux
+  shell: |
+    setenforce 0
+    sed -i 's/^SELINUX=.*/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+- name: Install FOG
+  shell: |
+    cd /root/fog/bin
+    ./installfog.sh -Y -f /root/temp_settings
+
+
+- name: Copy images in DGP to CTO HPO
+  shell: |
+    scp -r -P 2211 root@ip27.digitel.vn:/images/CTO-HPO-Win10-Teamleader-Update /images 
+    scp -r -P 2211 root@ip27.digitel.vn:/images/CTO-HPO-Win10-Telesale-Update /images
+
+- name: send a message to chat in playbook
+  telegram:
+    token: '1792774787:AAEYZ5OocqsWHWuIBizx5RSxrVTdH8m089A'
+    chat_id: -547842145
+    msg: Ansible task (FOG Project) finished

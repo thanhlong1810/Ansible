@@ -1,0 +1,24 @@
+---
+- name: Append to file authorized_keys if add to server.
+  hosts: all
+  become: yes
+  become_user: root
+
+  vars:
+    - source_file: /Users/longtran/Desktop/Anisible/Ansible/authorized_keys
+    - dest_file: $HOME/.ssh/authorized_keys
+
+
+  tasks:
+    - name: Append contents of a ssh-key file to a destination file
+      blockinfile:
+          block: "{{ lookup('file', '{{ source_file }}') }}"
+          dest: "{{ dest_file }}"
+          state: present
+
+    - name : edit permissions file authorized_keys 
+      file:
+        path: "{{ dest_file }}"
+        mode : 0600
+
+    

@@ -1,0 +1,39 @@
+---
+- name: create file ssh-key for root, copy file authorized_keys add to server.
+  hosts: all
+  become: yes
+  become_user: root
+
+  vars:
+    - source_file: /Users/longtran/Desktop/Anisible/Ansible/authorized_keys
+    - dest_file: $HOME/.ssh/
+
+  tasks:
+    - name: Create target directory
+      file: 
+        path: "{{ dest_file }}"
+        state: directory
+        mode: 0700
+
+    - name: create ssh-key for user root
+      openssh_keypair:
+        path: $HOME/.ssh/id_ssh_rsa
+        type: rsa 
+        size: 2048
+        state: present
+        force: no
+
+    - name : copy file authorized_keys and edit permissions
+      copy:
+        src: "{{ source_file }}"
+        dest: "{{ dest_file }}"
+        mode : 0600
+  
+    - name: Stop firewalld
+      service:
+        name: firewalld
+        state: stopped
+        enabled: False
+    
+    - name: upgrade all packages
+      yum: name=* state=latest

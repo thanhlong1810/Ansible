@@ -1,0 +1,43 @@
+---
+- name: Install SNMP
+  hosts: all
+  become: yes
+  become_user: root
+
+  # edit community string
+  vars:
+    - community : testcomunity
+
+
+  tasks:
+    - name: Install SNMP centos7
+      yum:
+        name:
+          - net-snmp
+          - net-snmp-utils
+
+
+    - name: Enable SNMP
+      service:
+        name: snmpd
+        state: started
+        enabled: yes
+
+
+    - name: Add a line to a file if the file does not exist, without passing regexp
+      lineinfile:
+        path: /etc/snmp/snmpd.conf
+        line: rocommunity  {{ community }}
+        create: yes
+
+
+    - name: Copy source file config SNMP to file 
+      copy: 
+        src: /etc/snmp/snmpd.conf
+        dest: /etc/snmp/snmpd.conf.ori
+
+
+    - name: Restart service snmpd
+      service:
+        name: snmpd
+        state: restarted

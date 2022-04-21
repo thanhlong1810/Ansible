@@ -1,0 +1,4 @@
+- name: Reload firewalld
+  systemd:
+    state: reloaded
+    name: firewalld

@@ -1,0 +1,11 @@
+---
+- name: Bypass SELinix in ClamAV
+  hosts: all
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Bypass SELinix in ClamAV
+      shell:  |
+        setsebool -P antivirus_can_scan_system 1
+        setsebool -P clamd_use_jit 1

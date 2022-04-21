@@ -1,0 +1,68 @@
+---
+- name: Install Filebeat on Centos7
+  hosts: all
+  become: yes
+  become_user: root
+
+  vars:
+    - version: filebeat-8.1.1
+    - link: https://artifacts.elastic.co/downloads/beats/filebeat/{{ version }}-x86_64.rpm
+    - pagkage: "{{ version }}-x86_64.rpm"
+    - path: /opt
+    - source_file: /Users/longtran/Desktop/Anisible/Ansible/filebeat/filebeat.yml
+    - dest_file: /etc/filebeat/
+    - cert: /Users/longtran/Desktop/Anisible/Ansible/filebeat/logstash.crt
+    - dest_cert: /home/ssl/
+
+  tasks:
+    - name: Download package {{ version }}.rpm
+      get_url:
+        url: '{{ link }}'
+        dest: "{{ path }}"
+        validate_certs: no
+      
+    - name: Install {{ version }}
+      yum:
+        name:
+          - "{{ path }}/{{ pagkage }}"
+        state: present
+
+    - name: Move files *.conf to *.conf.default
+      copy:
+        remote_src: yes
+        src: /etc/filebeat/filebeat.yml
+        dest: /etc/filebeat/filebeat.yml.default
+
+    - name : copy file filebeat.conf to /etc
+      copy:
+        src: "{{ source_file }}"
+        dest: "{{ dest_file }}"
+
+    - name: Create target directory logs file
+      file: 
+        path: /var/log/filebeat
+        state: directory
+        mode: 0755
+
+    - name: Create target directory config file
+      file: 
+        path: /etc/filebeat/inputs.d/
+        state: directory
+        mode: 0755
+
+    - name: Create target directory cert file
+      file: 
+        path: /home/ssl/
+        state: directory
+        mode: 0755
+
+    - name : copy file logstash.crt to /home/ssl/
+      copy:
+        src: "{{ cert }}"
+        dest: "{{ dest_cert }}"
+
+    - name: Enable Filebeat
+      service:
+        name: filebeat
+        state: started
+        enabled: yes
