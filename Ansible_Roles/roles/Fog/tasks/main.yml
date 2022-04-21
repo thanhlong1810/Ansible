@@ -7,6 +7,7 @@
     src: temp_settings.j2
     dest: "/root/temp_settings"
 
+
 - name: Make sure unattended-upgrades is not installed
   yum:
     name: unattended-upgrades

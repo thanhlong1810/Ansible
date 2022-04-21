@@ -1,6 +1,0 @@
----
-- hosts: client1
-  become: yes
-  roles:
-    - common
-    - Check_mk

@@ -22,8 +22,8 @@
 
 - name: Install Chek_mk Centos7
   get_url:
-    url: https://download.checkmk.com/checkmk/2.0.0p17/ {{ check_mk_version }}x86_64.rpm
-    dest: /root{{ check_mk_version }}x86_64.rpm
+    url: https://download.checkmk.com/checkmk/2.0.0p17/{{ check_mk_version }}.x86_64.rpm
+    dest: /root/{{ check_mk_version }}x86_64.rpm
 
 - name: Install Check_mk
   shell: |

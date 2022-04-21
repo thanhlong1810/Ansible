@@ -1,54 +1,8 @@
-[centos]
-192.168.0.106
+[client1]
+192.168.0.113
 
 
-[centos:vars]
-ansible_ssh_user=root
-ansible_ssh_pass=123
-ansible_become_password=123
-
-
-{
- "insecure-registries": [
-      "harbor-registry.com"
- ]
-}
-
-
-openssl req -x509 -new -nodes -sha512 -days 3650 \
- -subj "/C=CN/ST=Colombo/L=Colombo/O=Organization/OU=Personal/CN=harbor.digitel.vn" \
- -key ca.key \
- -out ca.crt
-
- openssl genrsa -out harbor-registry.com.key 4096
-
-
-
-
-\\ssl settings (we can use easy-rsa if we want to)
-mkdir /etc/ssl/private
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /etc/ssl/private/harbor.key -out /etc/ssl/private/harbor.crt -subj "/C=VN/ST=HCM/L=TPHCM/OU=IT=/CN=harbor"
-
-cat /etc/ssl/private/harbor.crt /etc/ssl/private/harbor.key > /etc/ssl/private/ca.crt
-openssl dhparam -out /etc/ssl/private/dh2048.pem 2048
-openvpn --genkey --secret /etc/ssl/private/tls-auth.key
-ls -l /etc/ssl/private
-
-
-cp /etc/ssl/private/* /etc/openvpn/server
-ls -l /etc/openvpn/server
-
-\\create client certs 
-openssl genrsa -out /etc/ssl/private/client.key 2048
-openssl req -sha256 -out /etc/ssl/private/client.csr -key /etc/ssl/private/client.key -new -subj "/C=VN/ST=HCM/L=London/OU=IT=/CN=openvpn-client"
-openssl x509 -sha256 -req -days 365 -CA /etc/ssl/private/ca.crt -in /etc/ssl/private/client.csr -set_serial 01 -out /etc/ssl/private/client.crt
-
-
-
-/etc/docker/certs.d/harbor.digitel.vn/
-
-
-openssl x509 -inform PEM -in harbor.crt -out harbor.cert
-VBoxManage modifymedium ~/VirtualBox VMs/Centos7/Centos7.vdi --resize 20000
-
-/Users/longtran/VirtualBox VMs/Centos7/Centos7.vdi
+[client1:vars]
+ansible_user=root
+ansible_ssh_pass=123456
+ansible_become_password=123456
